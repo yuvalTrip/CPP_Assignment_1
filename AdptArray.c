@@ -26,7 +26,7 @@ int GetAdptArraySize(PAdptArray arr)/////////...................................
         return size;
     }
 }
-////////////////////////////////////////////////////////..................................................GOOD
+
 PAdptArray CreateAdptArray(COPY_FUNC CF, DEL_FUNC DF,PRINT_FUNC PF)//initialize an empty array without elements
 {
     // Allocate memory for the new 'class' of arrays
@@ -62,15 +62,12 @@ void DeleteAdptArray(PAdptArray PAdptArr)//realese the memory of the object (inc
             if (PAdptArr->PElemArr[i] != NULL)
             {
                 PAdptArr->del_func(PAdptArr->PElemArr[i]);
-                //PAdptArr->PElemArr[i] = NULL;
-                //free(PAdptArr->PElemArr[i]);
             }
         }
         PAdptArr->arrLen=0;
         free(PAdptArr->PElemArr);
         free(PAdptArr);
     }
-   //how to desl with null in elemnt if there are more elements in the continue????????????????????????????
 }
 
 Result SetAdptArrayAt(PAdptArray PAdptArr, int indx , PElement Pelement)
@@ -86,7 +83,7 @@ Result SetAdptArrayAt(PAdptArray PAdptArr, int indx , PElement Pelement)
     }
     else if (indx < 0)
     {
-        return -1;
+        return FAIL;
     }
     else // if the given index is not in the range of the current array
     {
@@ -108,57 +105,6 @@ Result SetAdptArrayAt(PAdptArray PAdptArr, int indx , PElement Pelement)
     PAdptArr->PElemArr[indx] = PAdptArr->copy_func(Pelement); // copy the element;
     return SUCCESS;
 }
-
-
-
-//Result SetAdptArrayAt(PAdptArray PAdptArr, int indx , PElement Pelement)// Get index and element. Save a deep copy of the element in the given index.(delete older object if already exist in this index)
-//{
-//
-//    int len= PAdptArr->arrLen; //current size of the array
-//    if (indx < len)//if the given index is in the range of the current array
-//    {
-//
-//        if (PAdptArr->PElemArr[indx]!=NULL)//if the index is used by another object , we will free the old object
-//        {
-//            PAdptArr->del_func(PAdptArr->PElemArr[indx]);
-//        }
-//
-//    }
-//    else if (indx<0)
-//    {
-//        return -1;
-//    }
-//    else//if the given index is not in the range of the current array
-//    {
-//        int new_size=indx+1;// Define the new size of the array
-//        PAdptArr->arrLen=new_size;
-//        PAdptArr->PElemArr= realloc(PAdptArr->PElemArr,new_size * sizeof(PElement));
-//        if (PAdptArr->PElemArr==NULL)
-//        {
-//            printf ("Memory allocation failed\n");
-//            exit(1);
-//        }
-//        // Allocate memory for 'new_size' elements in new array
-////        PElement* new_element_array= (PElement*)malloc(new_size * sizeof(PElement));
-////        if (new_element_array==NULL)
-////        {
-////            printf ("Memory allocation failed\n");
-////            exit(1);
-////        }
-//        // Now we will copy all the elements in the previous array to the new array
-////        for (int i=0;i<indx;i++)
-////        {
-////
-////            new_element_array[i] =(i<len)?PAdptArr->PElemArr[i]:NULL;//we will put the original elements in the new array
-////        }
-////
-////        free (PAdptArr->PElemArr);//delete the previous array of pointers
-////        PAdptArr->PElemArr=new_element_array;
-//    }
-//    // Set the new element at the given index in the array
-//    PAdptArr->PElemArr[indx] = PAdptArr->copy_func(Pelement);//copy the element;
-//    return SUCCESS;
-//}
 
 PElement GetAdptArrayAt(PAdptArray PAdptArr, int indx)//get index and return copy of the element in this index
 {
